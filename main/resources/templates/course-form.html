@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head><meta charset="UTF-8"><title th:text="${isEdit} ? '编辑课程' : '创建课程'">表单</title></head>
+<body>
+<h1 th:text="${isEdit} ? '编辑课程' : '创建新课程'"></h1>
+<p th:if="${error}" th:text="${error}" style="color:red"></p>
+<form th:action="${isEdit} ? @{/teacher/courses/{id}/edit(id=${course.id})} : @{/teacher/courses}" method="post">
+    <label>名称：</label><input type="text" name="name" th:value="${course.name}" required/><br/>
+    <label>描述：</label><textarea name="description" th:text="${course.description}"></textarea><br/>
+    <label>学分：</label><input type="number" name="credit" th:value="${course.credit}" required/><br/>
+    <label>容量：</label><input type="number" name="capacity" th:value="${course.capacity}" required/><br/>
+    <label>上课时间：</label><input type="text" name="schedule" th:value="${course.schedule}" required/><br/>
+    <button type="submit" th:text="${isEdit} ? '保存修改' : '创建课程'">提交</button>
+</form>
+<a th:href="@{/teacher/courses}">返回列表</a>
+</body>
+</html>

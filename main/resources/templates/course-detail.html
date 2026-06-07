@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title th:text="${course.name}">课程详情</title>
+</head>
+<body>
+    <h1 th:text="${course.name}">课程名称</h1>
+    <p><strong>描述：</strong> <span th:text="${course.description}"></span></p>
+    <p><strong>授课教师：</strong> <span th:text="${course.teacher.username}"></span></p>
+    <p><strong>学分：</strong> <span th:text="${course.credit}"></span></p>
+    <p><strong>容量：</strong> <span th:text="${course.capacity}"></span></p>
+    <p><strong>已选人数：</strong> <span th:text="${course.enrolledCount}"></span></p>
+    <p><strong>剩余容量：</strong> <span th:text="${course.getRemainingCapacity()}"></span></p>
+    <p><strong>上课时间：</strong> <span th:text="${course.schedule}"></span></p>
+    <a th:href="@{/student/courses}">返回列表</a>
+</body>
+</html>

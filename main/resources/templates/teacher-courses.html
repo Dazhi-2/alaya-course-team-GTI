@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>我的课程</title>
+</head>
+<body>
+<h1>我的课程</h1>
+<!-- 显示错误信息（用于越权访问等场景） -->
+<p th:if="${error}" th:text="${error}" style="color:red"></p>
+
+<a th:href="@{/teacher/courses/create}">创建新课程</a>
+<table border="1">
+    <tr>
+        <th>名称</th><th>学分</th><th>容量</th><th>已选</th><th>上课时间</th><th>操作</th><th>名单</th>
+    </tr>
+    <tr th:each="c : ${courses}">
+        <td th:text="${c.name}">课程名</td>
+        <td th:text="${c.credit}">4</td>
+        <td th:text="${c.capacity}">30</td>
+        <td th:text="${c.enrolledCount}">0</td>
+        <td th:text="${c.schedule}">周一1-2节</td>
+        <td>
+            <a th:href="@{/teacher/courses/{id}/edit(id=${c.id})}">编辑</a>
+            <form th:action="@{/teacher/courses/{id}/delete(id=${c.id})}" method="post" style="display:inline;">
+                <button type="submit" onclick="return confirm('确定删除？')">删除</button>
+            </form>
+        </td>
+        <td>
+            <a th:href="@{/teacher/courses/{id}/students(id=${c.id})}">查看学生名单</a>
+        </td>
+    </tr>
+</table>
+<a href="/home">返回首页</a>
+</body>
+</html>

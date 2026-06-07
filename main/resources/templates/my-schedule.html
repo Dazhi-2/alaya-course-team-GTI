@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>我的课表</title>
+</head>
+<body>
+<h1>我的课表</h1>
+<div th:if="${#lists.isEmpty(enrollments)}">
+    <p>暂无已选课程</p>
+</div>
+<div th:unless="${#lists.isEmpty(enrollments)}">
+    <table border="1">
+        <tr>
+            <th>课程名称</th>
+            <th>教师</th>
+            <th>学分</th>
+            <th>上课时间</th>
+            <th>操作</th>
+        </tr>
+        <tr th:each="e : ${enrollments}">
+            <td th:text="${e.course.name}">课程名</td>
+            <td th:text="${e.course.teacher.username}">教师</td>
+            <td th:text="${e.course.credit}">学分</td>
+            <td th:text="${e.course.schedule}">时间</td>
+            <td>
+                <form th:action="@{/student/enrollments/{id}/drop(id=${e.id})}" method="post" style="display:inline;">
+                    <button type="submit" onclick="return confirm('确定退课吗？')">退课</button>
+                </form>
+            </td>
+        </tr>
+    </table>
+</div>
+<p th:if="${successMessage}" th:text="${successMessage}" style="color:green"></p>
+<p th:if="${error}" th:text="${error}" style="color:red"></p>
+<a href="/student/courses">返回课程列表</a>
+</body>
+</html>

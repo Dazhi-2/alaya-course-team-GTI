@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>我的成绩</title>
+</head>
+<body>
+<h1>我的成绩</h1>
+<table border="1">
+    <thead>
+        <tr><th>课程</th><th>成绩</th><th>状态</th><th>评语</th></tr>
+    </thead>
+    <tbody>
+        <tr th:each="e : ${enrollments}">
+            <td th:text="${e.courseName}"></td>
+            <td th:text="${e.score} ?: '---'"></td>
+            <td>
+                <span th:if="${e.status == '已录入'}" style="color:green">已录入</span>
+                <span th:if="${e.status == '未录入'}" style="color:gray">未录入</span>
+            </td>
+            <td th:text="${e.gradeComment} ?: '---'"></td>
+        </tr>
+        <tr th:if="${#lists.isEmpty(enrollments)}">
+            <td colspan="4">暂无选课记录</td>
+        </tr>
+    </tbody>
+</table>
+<a th:href="@{/student/schedule}">返回我的课表</a>
+</body>
+</html>

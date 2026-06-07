@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>选课名单</title>
+</head>
+<body>
+<h1>选课名单</h1>
+<div th:if="${#lists.isEmpty(enrollments)}">
+    <p>暂无学生选课</p>
+</div>
+<div th:unless="${#lists.isEmpty(enrollments)}">
+    <table border="1">
+        <tr>
+            <th>学生用户名</th>
+            <th>选课时间</th>
+        </tr>
+        <tr th:each="e : ${enrollments}">
+            <td th:text="${e.student.username}">用户名</td>
+            <td th:text="${e.enrolledAt}">时间</td>
+        </tr>
+    </table>
+</div>
+<p th:if="${error}" th:text="${error}" style="color:red"></p>
+<a th:href="@{/teacher/courses}">返回我的课程</a>
+</body>
+</html>

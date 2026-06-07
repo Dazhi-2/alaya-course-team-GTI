@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>课程学生名单</title>
+</head>
+<body>
+<div th:if="${successMessage}" class="alert alert-success" th:text="${successMessage}"></div>
+<div th:if="${error}" class="alert alert-danger" th:text="${error}"></div>
+<h1>课程学生名单</h1>
+<p th:if="${error}" th:text="${error}" style="color:red"></p>
+<!-- 成绩统计区域（仅当有已录入成绩时显示） -->
+<div class="grade-stats" th:if="${gradedCount != null}">
+    <h3>成绩统计</h3>
+    <table>
+        <tr><th>已录入人数</th><td th:text="${gradedCount}"></td></tr>
+        <tr><th>平均分</th><td th:text="${averageScore}"></td></tr>
+        <tr><th>最高分</th><td th:text="${maxScore}"></td></tr>
+        <tr><th>最低分</th><td th:text="${minScore}"></td></tr>
+    </table>
+</div>
+<div th:unless="${gradedCount != null}" class="alert alert-info">暂无已录入成绩</div>
+
+<table border="1">
+    <thead>
+        <tr><th>学生</th><th>成绩状态</th><th>当前成绩</th><th>评语</th><th>操作</th></tr>
+    </thead>
+    <tbody>
+        <tr th:each="e : ${enrollments}">
+            <td th:text="${e.studentUsername}"></td>
+            <td>
+                <span th:if="${e.status == '已录入'}" style="color:green">已录入</span>
+                <span th:if="${e.status == '未录入'}" style="color:orange">未录入</span>
+            </td>
+            <td th:text="${e.score} ?: '---'"></td>
+            <td th:text="${e.gradeComment} ?: '---'"></td>
+            <td>
+                <form th:action="@{/teacher/enrollments/{id}/grade(id=${e.id})}" method="post">
+                    <input type="number" name="score" min="0" max="100" step="1" required th:value="${e.score}" />
+                    <input type="text" name="comment" maxlength="255" placeholder="评语（可选）" />
+                    <button type="submit" th:text="${e.score != null} ? '修改' : '录入'">录入</button>
+                </form>
+            </td>
+        </tr>
+        <tr th:if="${#lists.isEmpty(enrollments)}">
+            <td colspan="5">暂无学生选课</td>
+        </tr>
+    </tbody>
+</table>
+<a th:href="@{/teacher/courses}">返回我的课程</a>
+</body>
+</html>

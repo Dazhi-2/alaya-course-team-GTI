@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>课程列表</title>
+</head>
+<body>
+<h1>课程列表</h1>
+
+<!-- 显示操作结果消息（来自重定向的 flash 属性） -->
+<p th:if="${successMessage}" th:text="${successMessage}" style="color:green"></p>
+<p th:if="${error}" th:text="${error}" style="color:red"></p>
+
+<!-- 搜索表单（复用迭代2） -->
+<form th:action="@{/student/courses}" method="get">
+    <input type="text" name="keyword" th:value="${keyword}" placeholder="搜索课程名称"/>
+    <button type="submit">搜索</button>
+    <a th:href="@{/student/courses}">重置</a>
+</form>
+
+<!-- 课程列表表格 -->
+<table border="1">
+    <thead>
+        <tr>
+            <th>名称</th>
+            <th>教师</th>
+            <th>学分</th>
+            <th>容量</th>
+            <th>已选</th>
+            <th>剩余</th>
+            <th>上课时间</th>
+            <th>操作</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr th:each="c : ${courses}">
+            <td><a th:href="@{/student/courses/{id}(id=${c.id})}" th:text="${c.name}">课程名</a></td>
+            <td th:text="${c.teacher.username}">教师名</td>
+            <td th:text="${c.credit}">4</td>
+            <td th:text="${c.capacity}">30</td>
+            <td th:text="${c.enrolledCount}">0</td>
+            <td th:text="${c.getRemainingCapacity()}">30</td>
+            <td th:text="${c.schedule}">周一1-2节</td>
+            <td>
+                <!-- 选课表单：使用 th:action 自动生成 CSRF token -->
+                <form th:action="@{/student/courses/{id}/enroll(id=${c.id})}" method="post" style="display:inline;">
+                    <!-- 当课程已满时禁用选课按钮，并提示 title -->
+                    <button type="submit" onclick="return confirm('确定选择该课程吗？')">选课</button>
+                        选课
+                    </button>
+                </form>
+            </td>
+        </tr>
+    </tbody>
+</table>
+
+<!-- 分页导航（保持 keyword 参数） -->
+<div th:if="${totalPages > 1}">
+    <a th:if="${currentPage > 0}" th:href="@{/student/courses(page=${currentPage-1}, keyword=${keyword})}">上一页</a>
+    <span th:text="'第 ' + ${currentPage+1} + ' / ' + ${totalPages} + ' 页'"></span>
+    <a th:if="${currentPage+1 < totalPages}" th:href="@{/student/courses(page=${currentPage+1}, keyword=${keyword})}">下一页</a>
+</div>
+
+<p th:if="${#lists.isEmpty(courses)}">暂无课程</p>
+<a href="/home">返回首页</a>
+</body>
+</html>
